@@ -71,11 +71,12 @@ def punctuate(text, tokenizer, models):
 def transcribe_audiofiles(
     dia_results: list[tuple[str, float, float, str]], models_path: str
 ) -> list[tuple[str, str]]:
+    transcription_model_path = str(Path(models_path) / MODEL)
     # load models
     pipe = pipeline(
         task="automatic-speech-recognition",
-        model=str(Path(models_path) / MODEL),
-        tokenizer=MODEL,
+        model=transcription_model_path,
+        tokenizer=transcription_model_path,
         chunk_length_s=CHUNK_LENGTH_S,
         device=0,
         batch_size=BATCH_SIZE,
@@ -101,7 +102,7 @@ def transcribe_audiofiles(
         .cuda()
         for f in PUNCT_MODELS
     ]
-    tokenizer = AutoTokenizer.from_pretrained(PUNCT_MODELS[0])
+    tokenizer = AutoTokenizer.from_pretrained(str(Path(models_path) / PUNCT_MODELS[0]))
 
     # post process
     for i, text in enumerate(texts):
