@@ -1,6 +1,7 @@
 import warnings
 import transformers
 import torch
+from pathlib import Path
 
 print(transformers.__version__)
 from transformers import pipeline, AutoModelForTokenClassification, AutoTokenizer
@@ -8,20 +9,17 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-MODEL = "/kaggle/input/bengali-ai-asr-submission/bengali-whisper-medium/"
+MODEL = "bengali-whisper-medium"
 PUNCT_MODELS = [
-    "/kaggle/input/bengali-ai-asr-submission/punct-model-6layers/",
-    "/kaggle/input/bengali-ai-asr-submission/punct-model-8layers/",
-    "/kaggle/input/bengali-ai-asr-submission/punct-model-11layers/",
-    "/kaggle/input/bengali-ai-asr-submission/punct-model-12layers/",
+    "punct-model-6layers/",
+    "punct-model-8layers/",
+    "punct-model-11layers/",
+    "punct-model-12layers/",
 ]
+
 CHUNK_LENGTH_S = 20.1
 PUNCT_WEIGHTS = [[1.0, 1.4, 1.0, 0.8]]
-
 BATCH_SIZE = 4
-
-EVAL = False
-DATASET_PATH = "/kaggle/input/bengaliai-speech/examples"
 
 
 def fix_repetition(text, max_count):
@@ -71,12 +69,12 @@ def punctuate(text, tokenizer, models):
 
 
 def transcribe_audiofiles(
-    dia_results: list[tuple[str, float, float, str]]
+    dia_results: list[tuple[str, float, float, str]], models_path: str
 ) -> list[tuple[str, str]]:
     # load models
     pipe = pipeline(
         task="automatic-speech-recognition",
-        model=MODEL,
+        model=str(Path(models_path) / MODEL),
         tokenizer=MODEL,
         chunk_length_s=CHUNK_LENGTH_S,
         device=0,
@@ -98,7 +96,9 @@ def transcribe_audiofiles(
 
     # load punctuation models
     models = [
-        AutoModelForTokenClassification.from_pretrained(f).eval().cuda()
+        AutoModelForTokenClassification.from_pretrained(str(Path(models_path) / f))
+        .eval()
+        .cuda()
         for f in PUNCT_MODELS
     ]
     tokenizer = AutoTokenizer.from_pretrained(PUNCT_MODELS[0])
