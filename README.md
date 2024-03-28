@@ -6,7 +6,7 @@ Record -> (Diarize -> Transcribe) -> Summarize
 
 ## How to use
 
-Currently this repo consists only of the transcription part. An example audio is given, namely `talkshow.wav`. You need a GPU with memory ~10GB to run the transcription in this implementation. Change device in `src/transcribe/transcribe.py` to CPU if you don't have a GPU.
+Currently this repo consists only of the transcription part. An example audio is given, namely `talkshow.wav`. You need a GPU to run the transcription in this implementation. Change device in `src/transcribe/transcribe.py` to CPU if you don't have a GPU.
 
 - Create a `.env` file in the root directory containing your huggingface token:
 

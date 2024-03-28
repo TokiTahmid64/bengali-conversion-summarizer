@@ -1,5 +1,4 @@
 from pyannote.audio import Pipeline
-from pyannote.audio.pipelines.utils.hook import ProgressHook
 from pyannote.core.annotation import Annotation
 from pydub import AudioSegment
 import os
@@ -15,8 +14,7 @@ def diarize_audio(fpath: str) -> list[tuple[str, float, float, str]]:
     )
 
     # get diarization
-    with ProgressHook() as hook:
-        diarization: Annotation = pipeline(fpath, hook=hook)
+    diarization: Annotation = pipeline(fpath)
 
     # merge consecutive speech turns from the same speaker
     results: list[tuple] = []
