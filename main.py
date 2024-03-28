@@ -12,5 +12,5 @@ if __name__ == "__main__":
     shutil.rmtree("dia_output")
 
     conv_str = "\n".join([f"{name}: {text}" for name, text in conversation])
-    with open("conversation.txt", "w") as f:
+    with open("output.txt", "w") as f:
         f.write(conv_str)
