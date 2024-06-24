@@ -28,3 +28,7 @@ python main.py <path_to_audio_file> <directory_of_downloaded_models>
 ```
 
 5. Summary will be available in `summary.txt` file.
+
+## Demo
+
+You can find a demo of the summarizer [here](https://www.kaggle.com/code/salmankhondker/bengali-conversation-summarizer-demo).
